@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grand Horizon | Hotel Reservation Management System</title>
+  
+  <!-- Favicon / Brand Icon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏨</text></svg>">
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Chart.js for Reports & Visual Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- ====================================================================
+         SIDEBAR NAVIGATION
+         ==================================================================== -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">
+          <i class="fa-solid fa-hotel"></i>
+        </div>
+        <div class="brand-details">
+          <h1>Grand Horizon</h1>
+          <span>Luxury Hotel & Suites</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Core Operations</div>
+        
+        <a class="nav-item active" data-page="dashboard">
+          <i class="fa-solid fa-chart-line icon"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <a class="nav-item" data-page="reservations">
+          <i class="fa-solid fa-calendar-check icon"></i>
+          <span>Reservations</span>
+          <span class="nav-badge" style="background: rgba(197, 160, 89, 0.3); color: var(--gold);" id="nav-active-res-badge">Active</span>
+        </a>
+
+        <a class="nav-item" data-page="rooms">
+          <i class="fa-solid fa-door-open icon"></i>
+          <span>Rooms</span>
+        </a>
+
+        <a class="nav-item" data-page="room-types">
+          <i class="fa-solid fa-bed icon"></i>
+          <span>Room Types</span>
+        </a>
+
+        <a class="nav-item" data-page="guests">
+          <i class="fa-solid fa-users icon"></i>
+          <span>Guests</span>
+        </a>
+
+        <div class="nav-section-title" style="margin-top: 10px;">Finance & Administration</div>
+
+        <a class="nav-item" data-page="payments">
+          <i class="fa-solid fa-credit-card icon"></i>
+          <span>Payments</span>
+        </a>
+
+        <a class="nav-item" data-page="staff">
+          <i class="fa-solid fa-user-tie icon"></i>
+          <span>Staff Directory</span>
+        </a>
+
+        <a class="nav-item" data-page="reports">
+          <i class="fa-solid fa-chart-pie icon"></i>
+          <span>Reports & Analytics</span>
+        </a>
+
+        <div class="nav-section-title" style="margin-top: 10px;">Academic DBMS Tools</div>
+
+        <a class="nav-item" data-page="dbms" style="border: 1px dashed rgba(197, 160, 89, 0.4);">
+          <i class="fa-solid fa-database icon" style="color: var(--gold);"></i>
+          <span style="color: #ffffff; font-weight: 600;">DBMS Explorer</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="dbms-tag">DBMS Academic Project</span>
+        <div style="font-weight: 600; color: #fff;">Hotel Management System</div>
+        <div style="font-size: 11px; margin-top: 4px; color: var(--text-light);">SQLite Relational Engine • Enforcing FK & Constraints</div>
+      </div>
+    </aside>
+
+    <!-- ====================================================================
+         MAIN APP CONTENT WRAPPER
+         ==================================================================== -->
+    <div class="main-wrapper">
+      
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle-btn" id="menu-toggle" aria-label="Toggle Navigation">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="page-title-box">
+            <h2 id="header-page-title">Executive Overview</h2>
+            <p id="header-page-subtitle">Real-time hotel occupancy, reservation analytics, and operational metrics</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="status-indicator">
+            <div class="status-dot"></div>
+            <span id="header-occupancy-badge">Occupancy: --%</span>
+          </div>
+
+          <button class="btn btn-secondary btn-sm" onclick="App.confirmResetDatabase()" title="Reset DB back to sample dataset">
+            <i class="fa-solid fa-rotate-left"></i> Reset Sample Data
+          </button>
+
+          <button class="btn btn-gold btn-sm" onclick="ReservationsComponent.openBookingModal()">
+            <i class="fa-solid fa-calendar-plus"></i> Make Reservation
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Body Views -->
+      <main class="content-body">
+        
+        <!-- View 1: Dashboard -->
+        <section id="view-dashboard" class="page-view active"></section>
+
+        <!-- View 2: Room Types -->
+        <section id="view-room-types" class="page-view"></section>
+
+        <!-- View 3: Rooms -->
+        <section id="view-rooms" class="page-view"></section>
+
+        <!-- View 4: Guests -->
+        <section id="view-guests" class="page-view"></section>
+
+        <!-- View 5: Reservations -->
+        <section id="view-reservations" class="page-view"></section>
+
+        <!-- View 6: Payments -->
+        <section id="view-payments" class="page-view"></section>
+
+        <!-- View 7: Staff -->
+        <section id="view-staff" class="page-view"></section>
+
+        <!-- View 8: Reports -->
+        <section id="view-reports" class="page-view"></section>
+
+        <!-- View 9: DBMS Architecture & Explorer -->
+        <section id="view-dbms" class="page-view"></section>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- Global Modal Dialog Overlay -->
+  <div class="modal-overlay" id="app-modal">
+    <div class="modal-content" id="modal-inner-container">
+      <!-- Modal Header, Body, and Footer injected dynamically -->
+    </div>
+  </div>
+
+  <!-- Global Toast Notification Container -->
+  <div class="toast-container" id="app-toast-container"></div>
+
+  <!-- Component Scripts -->
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/components/dashboard.js"></script>
+  <script src="/static/js/components/roomTypes.js"></script>
+  <script src="/static/js/components/rooms.js"></script>
+  <script src="/static/js/components/guests.js"></script>
+  <script src="/static/js/components/reservations.js"></script>
+  <script src="/static/js/components/payments.js"></script>
+  <script src="/static/js/components/staff.js"></script>
+  <script src="/static/js/components/reports.js"></script>
+  <script src="/static/js/components/dbmsExplorer.js"></script>
+  
+  <!-- Master Application Script -->
+  <script src="/static/js/app.js"></script>
+
+</body>
+</html>
